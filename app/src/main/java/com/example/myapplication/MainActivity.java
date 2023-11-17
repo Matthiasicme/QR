@@ -1,12 +1,14 @@
 package com.example.myapplication;
 
-import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.MenuItem;
+import android.Manifest;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -21,6 +23,14 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Dodaj przycisk cofania
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startScanner();
@@ -37,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     @Override
     public void handleResult(com.google.zxing.Result result) {
-        // tu sie doda wynik skanowania, zeby sie wyswietlil na ekranie ect
+        // tu sie doda wynik skanowania, zeby sie wyswietlil na ekranie etc
         Toast.makeText(this, "Zeskanowano: " + result.getText(), Toast.LENGTH_LONG).show();
         scannerView.resumeCameraPreview(this);
     }
@@ -70,4 +80,18 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             }
         }
     }
+
+    // Obsługa przycisku cofania w Toolbarze
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 }
+
+
