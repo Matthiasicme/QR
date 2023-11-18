@@ -4,6 +4,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.Manifest;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 101;
     private ZXingScannerView scannerView;
+    private TextView urlTextView; // Dodaj pole tekstowe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        // Dodaj to
+        urlTextView = findViewById(R.id.urlTextView);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startScanner();
@@ -47,8 +52,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     @Override
     public void handleResult(com.google.zxing.Result result) {
-        // tu sie doda wynik skanowania, zeby sie wyswietlil na ekranie etc
-        Toast.makeText(this, "Zeskanowano: " + result.getText(), Toast.LENGTH_LONG).show();
+        String scannedText = result.getText();
+        Toast.makeText(this, "Zeskanowano: " + scannedText, Toast.LENGTH_LONG).show();
+
+        // Dodaj to
+        urlTextView.setText(scannedText);
+
         scannerView.resumeCameraPreview(this);
     }
 
