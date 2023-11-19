@@ -1,12 +1,16 @@
 package com.example.myapplication;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
@@ -65,6 +69,13 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.add_notes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddNotesDialog();
+            }
+        });
+
         findViewById(R.id.btnScan).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,4 +91,45 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+    private void showAddNotesDialog() {
+        // Utwórz okno dialogowe
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Dodaj notatkę");
+        builder.setMessage("Wprowadź identyfikator pacjenta i notatkę:");
+
+        // Dodaj pola do wprowadzenia identyfikatora pacjenta i notatki
+        final EditText pacjentIdInput = new EditText(this);
+        pacjentIdInput.setHint("Identyfikator pacjenta");
+        final EditText notatkiInput = new EditText(this);
+        notatkiInput.setHint("Notatki");
+
+        // Ustaw layout dla pól
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(pacjentIdInput);
+        layout.addView(notatkiInput);
+        builder.setView(layout);
+
+        builder.setPositiveButton("Dodaj", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String pacjentId = pacjentIdInput.getText().toString().trim();
+                String newNote = notatkiInput.getText().toString().trim();
+
+                if (!pacjentId.isEmpty() && !newNote.isEmpty()) {
+                    databaseReference.child(pacjentId).child("notatki").setValue(newNote);
+                }
+            }
+        });
+
+        builder.setNegativeButton("Anuluj", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
 }
