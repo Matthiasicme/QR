@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 101;
     private ZXingScannerView scannerView;
-    private TextView urlTextView; // Dodaj pole tekstowe
+    private TextView urlTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +30,10 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // Dodaj przycisk cofania
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        // Dodaj to
         urlTextView = findViewById(R.id.urlTextView);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -55,11 +54,12 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         String scannedText = result.getText();
         Toast.makeText(this, "Zeskanowano: " + scannedText, Toast.LENGTH_LONG).show();
 
-        // Dodaj to
-        urlTextView.setText(scannedText);
+        Intent intent = new Intent(this, PacjentDetailsActivity.class);
+        intent.putExtra("PACJENT_ID", scannedText);
+        startActivity(intent);
 
-        scannerView.resumeCameraPreview(this);
     }
+
 
     @Override
     protected void onPause() {
@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         }
     }
 
-    // Obsługa przycisku cofania w Toolbarze
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

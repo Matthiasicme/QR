@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "105140975881",
+    "firebase_url": "https://medscan-connect-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "medscan-connect",
+    "storage_bucket": "medscan-connect.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:105140975881:android:3a7829dce007bf11df7bd8",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYRyQQdfhfC8Klts70oeMMLFuEd641RwM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
