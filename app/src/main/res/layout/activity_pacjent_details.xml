@@ -3,50 +3,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".PacjentDetailsActivity">
+
+    <TextView
+        android:id="@+id/PanelName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dane pacjenta"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"/>
 
     <TextView
         android:id="@+id/imieTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Imię:"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp" />
+        android:textSize="18sp"
+        android:layout_below="@+id/PanelName"
+        android:layout_marginTop="16dp" />
 
     <TextView
         android:id="@+id/nazwiskoTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nazwisko:"
+        android:textSize="18sp"
         android:layout_below="@+id/imieTextView"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/wiekTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Wiek:"
+        android:textSize="18sp"
         android:layout_below="@+id/nazwiskoTextView"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/chorobaTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Choroba:"
+        android:textSize="18sp"
         android:layout_below="@+id/wiekTextView"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/pokojTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pokój:"
+        android:textSize="18sp"
         android:layout_below="@+id/chorobaTextView"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/notatkiTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Notatki:"
+        android:textSize="18sp"
+        android:layout_below="@+id/pokojTextView"
+        android:layout_marginTop="8dp" />
 
 </RelativeLayout>

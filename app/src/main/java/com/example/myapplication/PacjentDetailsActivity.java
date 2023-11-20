@@ -15,7 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 public class PacjentDetailsActivity extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
-    private TextView imieTextView, nazwiskoTextView, wiekTextView, chorobaTextView, pokojTextView;
+    private TextView imieTextView, nazwiskoTextView, wiekTextView, chorobaTextView, pokojTextView, notatkiTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class PacjentDetailsActivity extends AppCompatActivity {
         wiekTextView = findViewById(R.id.wiekTextView);
         chorobaTextView = findViewById(R.id.chorobaTextView);
         pokojTextView = findViewById(R.id.pokojTextView);
+        notatkiTextView = findViewById(R.id.notatkiTextView);
 
         // Pobierz identyfikator pacjenta z Intentu
         String pacjentId = getIntent().getStringExtra("PACJENT_ID");
@@ -46,6 +47,7 @@ public class PacjentDetailsActivity extends AppCompatActivity {
                         int wiek = snapshot.child("wiek").getValue(Integer.class);
                         String choroba = snapshot.child("choroba").getValue(String.class);
                         int pokoj = snapshot.child("pokoj").getValue(Integer.class);
+                        String notatki = snapshot.child("notatki").getValue(String.class);
 
                         // Wyświetl dane w TextView
                         imieTextView.setText("Imię: " + imie);
@@ -53,6 +55,7 @@ public class PacjentDetailsActivity extends AppCompatActivity {
                         wiekTextView.setText("Wiek: " + wiek);
                         chorobaTextView.setText("Choroba: " + choroba);
                         pokojTextView.setText("Pokój: " + pokoj);
+                        notatkiTextView.setText("Notatki: " + notatki);
                     }
                 }
 
