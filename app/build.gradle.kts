@@ -40,6 +40,7 @@ dependencies {
     implementation("me.dm7.barcodescanner:zxing:1.9.8")
     implementation ("com.journeyapps:zxing-android-embedded:4.2.0")
     implementation("com.google.firebase:firebase-database:20.3.0")
+    implementation("com.google.firebase:firebase-auth:22.3.0")
 
 
     testImplementation("junit:junit:4.13.2")
