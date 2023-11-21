@@ -20,7 +20,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 101;
     private ZXingScannerView scannerView;
-    private TextView urlTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        urlTextView = findViewById(R.id.urlTextView);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startScanner();
