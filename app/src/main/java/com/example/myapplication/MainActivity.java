@@ -14,12 +14,19 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class MainActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 101;
     private ZXingScannerView scannerView;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +39,9 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference("Pacjenci");
 
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -50,12 +60,41 @@ public class MainActivity extends AppCompatActivity implements ZXingScannerView.
     @Override
     public void handleResult(com.google.zxing.Result result) {
         String scannedText = result.getText();
-        Toast.makeText(this, "Zeskanowano: " + scannedText, Toast.LENGTH_LONG).show();
 
-        Intent intent = new Intent(this, PacjentDetailsActivity.class);
-        intent.putExtra("PACJENT_ID", scannedText);
-        startActivity(intent);
+        if (isValidCode(scannedText)) {
+            checkIfPatientExists(scannedText);
+        } else {
+            Toast.makeText(this, "Niepoprawny format kodu: " + scannedText, Toast.LENGTH_LONG).show();
+            // Możesz tutaj obsłużyć sytuację, gdy kod jest niepoprawny
+        }
+    }
 
+    private boolean isValidCode(String scannedText) {
+        return scannedText.matches("^pacjent\\d+$");
+    }
+
+    private void checkIfPatientExists(String scannedText) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Pacjenci");
+        reference.child(scannedText)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            Toast.makeText(MainActivity.this, "Zeskanowano: " + scannedText, Toast.LENGTH_LONG).show();
+
+                            Intent intent = new Intent(MainActivity.this, PacjentDetailsActivity.class);
+                            intent.putExtra("PACJENT_ID", scannedText);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(MainActivity.this, "Pacjent o numerze " + scannedText + " nie istnieje", Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(MainActivity.this, "Błąd odczytu z bazy danych", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
 
