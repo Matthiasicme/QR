@@ -20,6 +20,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
 
@@ -114,13 +118,14 @@ public class HomeActivity extends AppCompatActivity {
                             // Zamień dane na odpowiednie typy
                             int wiek = Integer.parseInt(wiekStr);
                             int pokoj = Integer.parseInt(pokojStr);
-
+                            Pacjent pacjent = new Pacjent();
                             // Dodaj nowego pacjenta do bazy danych
                             databaseReference.child(pacjentId).child("imie").setValue(imie);
                             databaseReference.child(pacjentId).child("nazwisko").setValue(nazwisko);
                             databaseReference.child(pacjentId).child("wiek").setValue(wiek);
                             databaseReference.child(pacjentId).child("choroba").setValue(choroba);
                             databaseReference.child(pacjentId).child("pokoj").setValue(pokoj);
+
 
                             // Informacja zwrotna o dodaniu pacjenta
                             String info = "Dodano nowego pacjenta:\n" +
@@ -131,6 +136,8 @@ public class HomeActivity extends AppCompatActivity {
                                     "Choroba: " + choroba + "\n" +
                                     "Pokój: " + pokoj;
                             showToast(info);
+                            sendPacjentDataToServer(pacjent);
+
                         }
                         private void showToast(String message) {
                             Toast.makeText(HomeActivity.this, message, Toast.LENGTH_SHORT).show();
@@ -155,5 +162,29 @@ public class HomeActivity extends AppCompatActivity {
         builder.show();
     }
 
+    private void sendPacjentDataToServer(Pacjent pacjent) {
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
 
+        Call<Void> call = apiService.dodajPacjenta(pacjent);
+        call.enqueue(new Callback<Void>() {
+            @Override
+            public void onResponse(Call<Void> call, Response<Void> response) {
+                if (response.isSuccessful()) {
+                    showToast("Dodano pacjenta poprawnie");
+                } else {
+                    showToast("Błąd podczas dodawania pacjenta");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Void> call, Throwable t) {
+                showToast("Błąd komunikacji z serwerem");
+            }
+        });
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+
+    }
 }
